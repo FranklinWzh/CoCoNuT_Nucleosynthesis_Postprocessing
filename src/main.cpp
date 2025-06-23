@@ -7,6 +7,8 @@
 #include <filesystem>
 #include "globalvar.h"
 #include "assign.h"
+#include "isotope.h"
+#include "decay.h"
 namespace fs = std::filesystem;
 using namespace std;
 using namespace GlobalVar;
@@ -26,6 +28,30 @@ void sortByTime(std::vector<Matrix>& data) {
             return a[0][0] < b[0][0];
         });
 }
+void PostProcessing(string modelname)
+{
+    string synthesis_output = "./output/" + modelname + "/" +modelname +"_result.txt";
+    if(fs::exists(synthesis_output))
+    {
+        cout<<"Result exist"<<endl;
+        auto result = loadtxt(synthesis_output,0);
+        DecayChainInit(result);
+        ofstream decay_output("./output/" + modelname + "/" +modelname + "_decay.txt");
+        for(int i=0;i<result.size();i++)
+        {
+            auto record = result[i];
+            for(int j=0;j<record.size();j++)
+            {
+                decay_output<<record[j]<<" ";
+            }
+            decay_output<<endl;
+        }
+    }
+    else
+    {
+        cout<<"Result not exist"<<endl;
+    }
+}
 int main(int argc, char* argv[])
 {
     string modelname = "";
@@ -38,10 +64,16 @@ int main(int argc, char* argv[])
         cout<<"Model Name not assigned"<<endl;
         return 0;
     }
-    for(int i=1;i<argc;i++)
+    modelname = argv[1];
+    cout<<"Reading Model:"<<modelname<<endl;
+    if(argc>=3)
     {
-        modelname = argv[i];
-        cout<<"Reading Model:"<<modelname<<endl;
+        string param2 = argv[2];
+        if(param2=="post")
+        {
+            PostProcessing(modelname);
+        }
+        return 0;
     }
     string target_dir = "./models/"+modelname+"/";
     string prefix = "winnet_"+modelname+"_";

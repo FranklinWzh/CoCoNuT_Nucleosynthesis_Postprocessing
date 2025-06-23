@@ -4,6 +4,7 @@
 #include <vector>
 using namespace std;
 using Matrix = vector<vector<double>>;
+void DecayChainInit(Matrix& result);
 class DecayChain{
     public:
         isotope startIsotope;

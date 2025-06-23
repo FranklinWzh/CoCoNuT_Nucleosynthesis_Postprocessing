@@ -1,7 +1,12 @@
 #include "matrix.h"
 #include "globalvar.h"
 using namespace std;
-std::vector<std::vector<double>> loadtxt(const std::string& filename, int skip_rows) {
+bool tryParseDouble(const std::string& s, double& result) {
+    std::istringstream ss(s);
+    ss >> std::noskipws >> result;  // noskipws 防止吞掉空白后的非法字符
+    return ss.eof() && !ss.fail();
+}
+std::vector<std::vector<double>> loadtxt(const std::string& filename, int skip_rows=0) {
     std::ifstream file(filename);
     std::vector<std::vector<double>> data;
     std::string line;
@@ -27,13 +32,18 @@ std::vector<std::vector<double>> loadtxt(const std::string& filename, int skip_r
             continue;
         }
         std::istringstream ss(line);
+        std::string token;
         std::vector<double> row;
-        double value;
 
-        while (ss >> value) {
-            row.push_back(value);
+        while (ss >> token) {
+            double value;
+            if (tryParseDouble(token, value)) {
+                row.push_back(value);
+            } 
+            else {
+                std::cerr << "跳过非法值: " << token << std::endl;
+            }
         }
-
         if (!row.empty()) {
             data.push_back(row);
         }

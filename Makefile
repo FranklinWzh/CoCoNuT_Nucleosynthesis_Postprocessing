@@ -8,7 +8,7 @@ TARGET = nrndp
 SRC_DIR = src
 
 # 源文件
-SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/matrix.cpp $(SRC_DIR)/assign.cpp
+SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/matrix.cpp $(SRC_DIR)/assign.cpp $(SRC_DIR)/decay.cpp $(SRC_DIR)/isotope.cpp
 
 # 生成的 .o 目标文件
 OBJS = $(SRCS:.cpp=.o)
