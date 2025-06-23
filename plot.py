@@ -58,6 +58,7 @@ plt.title(f"Nucleosynthesis result for innermost ejecta(Mass {np.sum(mergedf_fra
 plt.grid(True)
 plt.tight_layout()
 plt.savefig(folder_path + modelname + "_synthesis.png")
+plt.savefig("figs/" + modelname + "_synthesis.png")
 print(f"total:{np.sum(mergedf_fraction) / pc.pc_msol}")
 plt.close()
 

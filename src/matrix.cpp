@@ -6,7 +6,7 @@ bool tryParseDouble(const std::string& s, double& result) {
     ss >> std::noskipws >> result;  // noskipws 防止吞掉空白后的非法字符
     return ss.eof() && !ss.fail();
 }
-std::vector<std::vector<double>> loadtxt(const std::string& filename, int skip_rows=0) {
+std::vector<std::vector<double>> loadtxt(const std::string& filename, int skip_rows) {
     std::ifstream file(filename);
     std::vector<std::vector<double>> data;
     std::string line;

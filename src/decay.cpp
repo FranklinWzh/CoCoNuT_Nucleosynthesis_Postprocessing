@@ -1,5 +1,6 @@
 #include "isotope.h"
 #include "decay.h"
+#include "matrix.h"
 #include <vector>
 #include <cmath>
 #include <fstream>
@@ -9,14 +10,20 @@ using Matrix = vector<vector<double>>;
 DecayChain::DecayChain(const isotope& s,const isotope& e): startIsotope(s), endIsotope(e) {}
 void DecayChainInit(Matrix& result)
 {
-    isotope Ni56 = isotope(28,28,"Ni56");
-    isotope Co56 = isotope(29,27,"Co56");
-    isotope Fe56 = isotope(30,26,"Fe56");
-    DecayChain DC1 = DecayChain(Ni56,Fe56);
-    DecayChain DC2 = DecayChain(Ni56,Fe56);
-    DC1.DecayData(result);
-    DC2.DecayData(result);
-    
+    auto m = loadtxt("decaychain.txt");
+    vector<DecayChain> DecayChains;
+    for(int i=0;i<m.size();i++)
+    {
+        isotope s = isotope(m[i][0],m[i][1]," ");
+        isotope e = isotope(m[i][2],m[i][3]," ");
+        DecayChains.push_back(DecayChain(s,e));
+    }
+    cout<<"All Decay Chains:"<<endl;
+    for(int i=0;i<DecayChains.size();i++)
+    {
+        cout<<DecayChains[i].startIsotope.N<<" "<<DecayChains[i].startIsotope.Z<<"---->"<<DecayChains[i].endIsotope.N<<" "<<DecayChains[i].endIsotope.Z<<endl;
+        DecayChains[i].DecayData(result);
+    }
 }
 void DecayChain::DecayData(Matrix& NucResult)
 {
@@ -38,10 +45,8 @@ void DecayChain::DecayData(Matrix& NucResult)
                 }
                 if(fabs(record2[0]-endIsotope.N)<0.1&&fabs(record2[1]-endIsotope.Z)<0.1)
                 {
-                    cout<<record[0]<<" "<<startIsotope.N<<" ";
                     record2[2] += record[2];
                     record[2] = 0;
-                    cout<<record[2]<<" "<<NucResult[i][2]<<endl;
                 }
             }
         }

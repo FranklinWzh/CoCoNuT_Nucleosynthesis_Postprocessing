@@ -95,7 +95,10 @@ int main(int argc, char* argv[])
         }
 
         std::cout << "\n共找到 " << extracted_names.size() << " 个以 \"" << prefix << "\" 开头的文件夹。\n";
-
+        if(extracted_names.size()==0)
+        {
+            return 0;
+        }
     } 
     catch (const fs::filesystem_error& e) {
         std::cerr << "File System Error" << e.what() << std::endl;

@@ -3,3 +3,4 @@ models/
 output/
 nrndp
 .DS_Store
+*.png
